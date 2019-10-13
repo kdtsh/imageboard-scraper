@@ -1,7 +1,5 @@
 package net.kdtsh.is.model.op;
 
-import java.net.URI;
-
 import org.springframework.stereotype.Component;
 
 import net.kdtsh.is.model.PostProperties;

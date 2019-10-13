@@ -11,10 +11,10 @@ public class BunkerchanChannel extends Channel {
 	 */
 	private static final long serialVersionUID = -563492221184213247L;
 
-	private static final Set<String> CHANNEL_PATH_SET;
+	private static final Set<String> CHANNEL_PATH_SET = null;
 
 	static {
-		CHANNEL_PATH_SET = Set.of("/leftypol/");
+//		CHANNEL_PATH_SET = Set.of("/leftypol/");
 	}
 
 	public static BunkerchanChannel getChannel(String channelPath) {
