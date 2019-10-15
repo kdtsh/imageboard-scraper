@@ -3,11 +3,8 @@ package net.kdtsh.is.imageboard;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
-
 import net.kdtsh.is.client.Client;
 
-@Component
 public abstract class Imageboard implements Serializable {
 
 	/**

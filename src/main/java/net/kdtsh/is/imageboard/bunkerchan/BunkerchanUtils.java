@@ -8,6 +8,8 @@ import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
 import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
 import static java.time.temporal.ChronoField.YEAR;
 
+import java.math.BigInteger;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,6 +26,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import net.kdtsh.is.imageboard.ImageboardUtils;
+import net.kdtsh.is.model.Page;
 import net.kdtsh.is.model.cp.Cp;
 import net.kdtsh.is.model.cp.CpPost;
 import net.kdtsh.is.model.cp.CpPostProperties;
@@ -33,12 +37,11 @@ import net.kdtsh.is.model.op.OpPost;
 import net.kdtsh.is.model.op.OpPostProperties;
 import net.kdtsh.is.model.op.OpPostUploads;
 
-public class BunkerchanUtils {
+public class BunkerchanUtils extends ImageboardUtils {
 
-	public List<Op> extractOpList(Document doc) {
+	public Page extractPage(Document doc) {
 
 		Elements opCellElements = doc.getElementsByClass("opCell");
-
 		List<Op> opList = new ArrayList<>();
 
 		for (Element opCellElement : opCellElements) {
@@ -50,7 +53,7 @@ public class BunkerchanUtils {
 			List<Cp> cpList = new ArrayList<>();
 			for (Element innerOpElement : innerOpElements) {
 
-				String id = innerOpElement.id();
+				BigInteger id = new BigInteger(innerOpElement.id());
 				String dataBoardUri = innerOpElement.attr("data-boarduri");
 
 				//
@@ -60,14 +63,17 @@ public class BunkerchanUtils {
 				String email = null;
 				String name = null;
 				Elements namesAndEmails = innerOpElement.getElementsByClass("linkName");
-				for (Element nameAndEmail : namesAndEmails) {
-					name = nameAndEmail.text();
-					email = nameAndEmail.attr("href");
+				if (!namesAndEmails.isEmpty()) {
+					name = namesAndEmails.get(0).text();
+					email = namesAndEmails.get(0).attr("href");
 				}
+
 				Elements createds = innerOpElement.getElementsByClass("labelCreated");
-				for (Element createdEl : createds) {
-					created = ZonedDateTime.of(LocalDateTime.parse(createdEl.text(), BUNKERCHAN_DATE_TIME_FORMATTER),
-							ZoneId.systemDefault()).toInstant();
+				if (!createds.isEmpty()) {
+					created = ZonedDateTime
+							.of(LocalDateTime.parse(createds.get(0).text(), BUNKERCHAN_DATE_TIME_FORMATTER),
+									ZoneId.systemDefault())
+							.toInstant();
 				}
 
 				CpPostProperties cpPostProperties = new CpPostProperties();
@@ -83,13 +89,13 @@ public class BunkerchanUtils {
 				//
 				// Cp Post
 				//
-				
+
 				String message = null;
 				Elements messages = innerOpElement.getElementsByClass("divMessage");
-				for (Element messageEl : messages) {
-					message = messageEl.text();
+				if (!messages.isEmpty()) {
+					message = messages.get(0).text();
 				}
-				
+
 				CpPost cpPost = new CpPost();
 				cpPost.setMessage(message);
 				cpPost.setCpPostProperties(cpPostProperties);
@@ -116,7 +122,7 @@ public class BunkerchanUtils {
 
 			OpPostUploads opPostUploads = new OpPostUploads();
 
-			String id = opCellElement.id();
+			BigInteger id = new BigInteger(opCellElement.id());
 			String dataBoardUri = opCellElement.attr("data-boarduri");
 
 			Instant created = null;
@@ -125,23 +131,24 @@ public class BunkerchanUtils {
 			String postSubject = null;
 			String threadLink = null;
 			Elements namesAndEmails = opCellElement.getElementsByClass("linkName");
-			for (Element nameAndEmail : namesAndEmails) {
-				name = nameAndEmail.ownText();
-				email = nameAndEmail.attr("href");
+			if (!namesAndEmails.isEmpty()) {
+				name = namesAndEmails.get(0).ownText();
+				email = namesAndEmails.get(0).attr("href");
 			}
+
 			Elements createds = opCellElement.getElementsByClass("labelCreated");
-			for (Element createdEl : createds) {
-				created = ZonedDateTime.of(LocalDateTime.parse(createdEl.text(), BUNKERCHAN_DATE_TIME_FORMATTER),
+			if (!createds.isEmpty()) {
+				created = ZonedDateTime.of(LocalDateTime.parse(createds.get(0).text(), BUNKERCHAN_DATE_TIME_FORMATTER),
 						ZoneId.systemDefault()).toInstant();
 			}
+
 			Elements postSubjects = opCellElement.getElementsByClass("labelSubject");
-			for (Element postSubjectEl : postSubjects) {
-				postSubject = postSubjectEl.text();
+			if (!postSubjects.isEmpty()) {
+				postSubject = postSubjects.get(0).text();
 			}
+
 			Elements threadLinks = opCellElement.getElementsByClass("linkReply");
-			for (Element threadLinkEl : threadLinks) {
-				threadLink = threadLinkEl.text();
-			}
+			threadLink = threadLinks.get(0).attr("href");
 
 			OpPostProperties opPostProperties = new OpPostProperties();
 			opPostProperties.setCreated(created);
@@ -152,10 +159,10 @@ public class BunkerchanUtils {
 
 			String message = null;
 			Elements messages = opCellElement.getElementsByClass("divMessage");
-			for (Element messageEl : messages) {
-				message = messageEl.text();
+			if (!messages.isEmpty()) {
+				message = messages.get(0).text();
 			}
-			
+
 			OpPost opPost = new OpPost();
 			opPost.setMessage(message);
 			opPost.setOpPostUploads(opPostUploads);
@@ -166,12 +173,14 @@ public class BunkerchanUtils {
 			op.setDataBoardUri(dataBoardUri);
 			op.setId(id);
 			op.setOpPost(opPost);
-			
+
 			opList.add(op);
 
 		}
 
-		return opList;
+		Page page = new Page();
+		page.setOpList(opList);
+		return page;
 
 	}
 
@@ -194,6 +203,12 @@ public class BunkerchanUtils {
 				.appendLiteral(" (").appendText(DAY_OF_WEEK, dow).appendLiteral(") ").appendValue(HOUR_OF_DAY, 2)
 				.appendLiteral(':').appendValue(MINUTE_OF_HOUR, 2).optionalStart().appendLiteral(':')
 				.appendValue(SECOND_OF_MINUTE, 2).optionalEnd().toFormatter();
+	}
+	
+	@Override
+	public URL getImageboardUrl() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

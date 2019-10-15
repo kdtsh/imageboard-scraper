@@ -3,7 +3,8 @@ package net.kdtsh.is.model;
 import java.io.Serializable;
 import java.time.Instant;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Abstract class for the properties of a post.
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @author kdt
  *
  */
-@Component
 public abstract class PostProperties implements Serializable {
 
 	/**
@@ -19,10 +19,13 @@ public abstract class PostProperties implements Serializable {
 	 */
 	private static final long serialVersionUID = 5898960434804703120L;
 
+	@JsonProperty
 	protected String name;
 
+	@JsonProperty
 	protected String email;
 
+	@JsonSerialize(using = InstantSerializer.class)
 	protected Instant created;
 
 	public String getName() {

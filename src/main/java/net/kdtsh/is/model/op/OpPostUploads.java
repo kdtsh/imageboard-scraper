@@ -1,7 +1,5 @@
 package net.kdtsh.is.model.op;
 
-import org.springframework.stereotype.Component;
-
 import net.kdtsh.is.model.PostUploads;
 
 /**
@@ -10,7 +8,6 @@ import net.kdtsh.is.model.PostUploads;
  * @author kdt
  *
  */
-@Component
 public class OpPostUploads extends PostUploads {
 
 	/**

@@ -2,7 +2,7 @@ package net.kdtsh.is.model;
 
 import java.io.Serializable;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Abstract class for a post.
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
  * @author kdt
  *
  */
-@Component
 public abstract class Post implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6716841220793596240L;
-	
+
+	@JsonProperty
 	protected String message;
 
 	public String getMessage() {

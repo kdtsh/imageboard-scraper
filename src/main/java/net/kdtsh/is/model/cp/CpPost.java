@@ -1,6 +1,7 @@
 package net.kdtsh.is.model.cp;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.kdtsh.is.model.Post;
 
@@ -10,7 +11,6 @@ import net.kdtsh.is.model.Post;
  * @author kdt
  *
  */
-@Component
 public class CpPost extends Post {
 
 	/**
@@ -18,8 +18,13 @@ public class CpPost extends Post {
 	 */
 	private static final long serialVersionUID = -1037915427277219998L;
 
+	//
+	//
+	// TODO this needs to be fixed
+	@JsonIgnore
 	protected CpPostUploads cpPostUploads;
 
+	@JsonProperty
 	protected CpPostProperties cpPostProperties;
 
 	public CpPostUploads getCpPostUploads() {
@@ -37,7 +42,7 @@ public class CpPost extends Post {
 	public void setCpPostProperties(CpPostProperties cpPostProperties) {
 		this.cpPostProperties = cpPostProperties;
 	}
-	
+
 	public String toString() {
 		return String.join(",", cpPostUploads.toString(), cpPostProperties.toString(), message.toString());
 	}

@@ -1,8 +1,9 @@
 package net.kdtsh.is.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Abstract class for a `P' - the top level of a post containing some metadata.
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @author kdt
  *
  */
-@Component
 public abstract class P implements Serializable {
 
 	/**
@@ -18,9 +18,11 @@ public abstract class P implements Serializable {
 	 */
 	private static final long serialVersionUID = 4676106632565129201L;
 
+	@JsonProperty("dataBoardUri")
 	protected String dataBoardUri;
 
-	protected String id;
+	@JsonProperty("id")
+	protected BigInteger id;
 
 	public String getDataBoardUri() {
 		return dataBoardUri;
@@ -30,11 +32,11 @@ public abstract class P implements Serializable {
 		this.dataBoardUri = dataBoardUri;
 	}
 
-	public String getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

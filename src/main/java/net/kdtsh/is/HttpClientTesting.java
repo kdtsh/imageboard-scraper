@@ -25,7 +25,11 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.kdtsh.is.imageboard.ImageboardUtils;
 import net.kdtsh.is.imageboard.bunkerchan.BunkerchanUtils;
+import net.kdtsh.is.model.Page;
 import net.kdtsh.is.model.op.Op;
 
 public class HttpClientTesting {
@@ -37,8 +41,7 @@ public class HttpClientTesting {
 
 		System.setProperty("javax.net.ssl.trustStore", "/Users/kdt/development/java/web-scraper/isrgrootx1.jks");
 
-		String url = "https://www.bunkerchan.xyz/leftypol/";
-//		String url = "https://www.4chan.org/b/";
+		String url = "https://www.bunkerchan.xyz/gulag/";
 		HttpClientBuilder cb = HttpClientBuilder.create();
 
 		//
@@ -66,11 +69,16 @@ public class HttpClientTesting {
 
 			Document doc = Jsoup.parse(html);
 			
-			BunkerchanUtils bu = new BunkerchanUtils();
-			List<Op> opList = bu.extractOpList(doc);
-			for (Op op: opList) {
-				System.out.println(op.toString());
-			}
+			ImageboardUtils bu = new BunkerchanUtils();
+			Page page = bu.extractPage(doc);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			System.out.println(objectMapper.writeValueAsString(page));
+			
+			
+//			for (Op op: opList) {
+//				System.out.println(op.toString());
+//			}
 			
 			
 			

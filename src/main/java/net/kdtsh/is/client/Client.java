@@ -3,8 +3,6 @@ package net.kdtsh.is.client;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import net.kdtsh.is.imageboard.Channel;
 import net.kdtsh.is.model.P;
 import net.kdtsh.is.model.op.Op;
@@ -15,7 +13,6 @@ import net.kdtsh.is.model.op.Op;
  * @author kdt
  *
  */
-@Component
 public interface Client {
 
 	/**

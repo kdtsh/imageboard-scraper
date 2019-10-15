@@ -1,6 +1,6 @@
 package net.kdtsh.is.model.op;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.kdtsh.is.model.PostProperties;
 
@@ -10,7 +10,6 @@ import net.kdtsh.is.model.PostProperties;
  * @author kdt
  *
  */
-@Component
 public class OpPostProperties extends PostProperties {
 
 	/**
@@ -18,8 +17,10 @@ public class OpPostProperties extends PostProperties {
 	 */
 	private static final long serialVersionUID = 6014078241191825447L;
 
+	@JsonProperty
 	private String postSubject;
 
+	@JsonProperty
 	private String threadLink;
 
 	public String getPostSubject() {
@@ -37,7 +38,7 @@ public class OpPostProperties extends PostProperties {
 	public void setThreadLink(String threadLink) {
 		this.threadLink = threadLink;
 	}
-	
+
 	public String toString() {
 		return String.join(",", postSubject, threadLink, name, email, created.toString());
 	}

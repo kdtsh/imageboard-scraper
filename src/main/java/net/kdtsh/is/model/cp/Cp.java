@@ -1,6 +1,6 @@
 package net.kdtsh.is.model.cp;
 
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.kdtsh.is.model.P;
 
@@ -10,7 +10,6 @@ import net.kdtsh.is.model.P;
  * @author kdt
  *
  */
-@Component
 public class Cp extends P {
 
 	/**
@@ -18,6 +17,7 @@ public class Cp extends P {
 	 */
 	private static final long serialVersionUID = -8603521237035746138L;
 
+	@JsonProperty
 	private CpPost cpPost;
 
 	public CpPost getCpPost() {
@@ -34,10 +34,10 @@ public class Cp extends P {
 	public String toJson() {
 		return null;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.join(",", id.toString(), cpPost.toString());		
+		return String.join(",", id.toString(), cpPost.toString());
 	}
 
 }

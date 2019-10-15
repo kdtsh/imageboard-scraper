@@ -2,15 +2,12 @@ package net.kdtsh.is.model;
 
 import java.io.Serializable;
 
-import org.springframework.stereotype.Component;
-
 /**
  * Abstract class for post uploads.
  * 
  * @author kdt
  *
  */
-@Component
 public abstract class PostUploads implements Serializable {
 
 	/**

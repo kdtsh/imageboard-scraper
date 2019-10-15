@@ -1,13 +1,12 @@
 package net.kdtsh.is.imageboard;
 
 import java.net.URL;
-import java.util.List;
 
 import org.jsoup.nodes.Document;
 
-import net.kdtsh.is.model.op.Op;
+import net.kdtsh.is.model.Page;
 
-public class ImageboardUtils {
+public abstract class ImageboardUtils {
 
 	/**
 	 * TODO implement this method
@@ -15,11 +14,7 @@ public class ImageboardUtils {
 	 * @param channel
 	 * @return
 	 */
-	public static URL getImageboardUrl(Imageboard imageboard) {
-
-		
-		return null;
-	}
+	public abstract URL getImageboardUrl();
 	
 	/**
 	 * TODO implement this method
@@ -27,9 +22,6 @@ public class ImageboardUtils {
 	 * @param imageboard
 	 * @return
 	 */
-	public static List<Op> extractOpList(Document doc, Imageboard imageboard) {
-		
-		return null;
-	}
+	public abstract Page extractPage(Document doc);
 
 }

@@ -5,14 +5,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
-
 import net.kdtsh.is.client.BunkerchanClientImpl;
 import net.kdtsh.is.client.Client;
 import net.kdtsh.is.imageboard.Channel;
 import net.kdtsh.is.imageboard.Imageboard;
 
-@Component
 public class BunkerchanImageboard extends Imageboard {
 
 	/**
