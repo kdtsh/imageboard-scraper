@@ -1,5 +1,6 @@
 package net.kdtsh.is.model.op;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,7 +25,7 @@ public class Op extends P {
 	private OpPost opPost;
 
 	@JsonProperty
-	private List<Cp> cpList;
+	private List<BigInteger> cpIdList;
 
 	public OpPost getOpPost() {
 		return opPost;
@@ -34,28 +35,12 @@ public class Op extends P {
 		this.opPost = opPost;
 	}
 
-	public List<Cp> getCpList() {
-		return cpList;
+	public List<BigInteger> getCpIdList() {
+		return cpIdList;
 	}
 
-	public void setCpList(List<Cp> cpList) {
-		this.cpList = cpList;
-	}
-
-	/**
-	 * TODO implement this method.
-	 */
-	public String toJson() {
-		return null;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder cpListSb = new StringBuilder();
-		for (Cp cp : cpList) {
-			cpListSb.append(cp.toString() + "\n");
-		}
-		return String.join(",", opPost.toString(), cpListSb.toString());
+	public void setCpIdList(List<BigInteger> cpList) {
+		this.cpIdList = cpList;
 	}
 
 }

@@ -1,8 +1,10 @@
 package net.kdtsh.is.imageboard.bunkerchan;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.kdtsh.is.imageboard.Channel;
+import net.kdtsh.is.imageboard.NoSuchChannelException;
 
 public class BunkerchanChannel extends Channel {
 
@@ -11,20 +13,22 @@ public class BunkerchanChannel extends Channel {
 	 */
 	private static final long serialVersionUID = -563492221184213247L;
 
-	private static final Set<String> CHANNEL_PATH_SET = null;
+	private static Map<String, String> CHANNEL_PATH_MAP = null;
 
 	static {
-//		CHANNEL_PATH_SET = Set.of("/leftypol/");
+		String[] channels = { "leftypol", "gulag" };
+		CHANNEL_PATH_MAP = new HashMap<>();
+		for (String channel : channels) {
+			CHANNEL_PATH_MAP.put(channel, channel);
+		}
 	}
 
-	public static BunkerchanChannel getChannel(String channelPath) {
-		if (CHANNEL_PATH_SET.contains(channelPath)) {
-			return new BunkerchanChannel(channelPath);
+	public static Channel checkChannel(String channel) {
+		if (CHANNEL_PATH_MAP.containsKey(channel)) {
+			return new BunkerchanChannel(channel);
 		} else {
-			//
-			// TODO exception?
-			//
-			return null;
+			throw new NoSuchChannelException(
+					"There is no such channel as `" + channel + "' on the Bunkerchan imageboard.");
 		}
 	}
 
@@ -32,10 +36,4 @@ public class BunkerchanChannel extends Channel {
 		this.channelPath = channelPath;
 	}
 
-	private String channelPath;
-
-	@Override
-	public String getChannelPath() {
-		return channelPath;
-	}
 }

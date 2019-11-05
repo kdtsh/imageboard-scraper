@@ -6,18 +6,29 @@ import org.jsoup.nodes.Document;
 
 import net.kdtsh.is.model.Page;
 
+/**
+ * Static methods for handling a particular imageboard.
+ * 
+ * @author kdt
+ *
+ */
 public abstract class ImageboardUtils {
 
 	/**
-	 * TODO implement this method
+	 * Get the URL for a channel.
+	 * 
 	 * @param imageboard
 	 * @param channel
 	 * @return
 	 */
-	public abstract URL getImageboardUrl();
-	
+	public abstract URL getChannelUrl(Channel channel);
+
 	/**
-	 * TODO implement this method
+	 * Extract a `Page' given a Document. This involves traversing a page, following
+	 * relevant links to threads, and creating a full view of all the threads on a
+	 * given page on a given imageboard (this will probably be the first page of the
+	 * board).
+	 * 
 	 * @param doc
 	 * @param imageboard
 	 * @return

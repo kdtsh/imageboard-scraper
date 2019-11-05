@@ -8,7 +8,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -27,10 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.kdtsh.is.es.ElasticsearchClient;
+import net.kdtsh.is.es.ElasticsearchClientImpl;
 import net.kdtsh.is.imageboard.ImageboardUtils;
+import net.kdtsh.is.imageboard.bunkerchan.BunkerchanImageboard;
 import net.kdtsh.is.imageboard.bunkerchan.BunkerchanUtils;
+import net.kdtsh.is.model.P;
 import net.kdtsh.is.model.Page;
-import net.kdtsh.is.model.op.Op;
 
 public class HttpClientTesting {
 
@@ -72,62 +74,16 @@ public class HttpClientTesting {
 			ImageboardUtils bu = new BunkerchanUtils();
 			Page page = bu.extractPage(doc);
 			
+			
+			
 			ObjectMapper objectMapper = new ObjectMapper();
-			System.out.println(objectMapper.writeValueAsString(page));
+			for (P p : page.getPList()) {
+				System.out.println(objectMapper.writeValueAsString(p));
+			}
 			
+			ElasticsearchClient ec = new ElasticsearchClientImpl(httpClient);
+			ec.postPs(page.getPList(), new BunkerchanImageboard());
 			
-//			for (Op op: opList) {
-//				System.out.println(op.toString());
-//			}
-			
-			
-			
-			
-//			Elements elements = doc.getElementsByClass("opCell");
-//
-//			int count = 1;
-//			for (Element element : elements) {
-//				logger.info("Body HTML element " + count + ": " + element.text());
-//
-////				Elements childElements = element.children();
-//				Elements innerOPElements = element.getElementsByClass("postCell");
-//				for (Element childElement : innerOPElements) {
-//					logger.info("Child HTML element tag: " + childElement.tagName());
-//					logger.info("Child HTML element class: " + childElement.className());
-//
-//					String id = childElement.id();
-//					String dataBoardUri = childElement.attr("data-boarduri");
-//
-//					Elements createds = childElement.getElementsByClass("labelCreated");
-//					for (Element created : createds) {
-//						logger.info("Child HTTP element created: " + created.text());
-//
-//						Instant createdInst = ZonedDateTime
-//								.of(LocalDateTime.parse(created.text(), BunkerchanUtils.BUNKERCHAN_DATE_TIME_FORMATTER),
-//										ZoneId.systemDefault())
-//								.toInstant();
-//						logger.info("Child HTTP element created: " + createdInst.getEpochSecond());
-//
-//					}
-//
-//					// <a class="linkName " href="mailto:sage">Anonymous</a>
-//					Elements namesAndEmails = childElement.getElementsByClass("linkName");
-//					for (Element nameAndEmail : namesAndEmails) {
-//						logger.info("Child HTTP element email: " + nameAndEmail.attr("href"));
-//						logger.info("Child HTTP element name: " + nameAndEmail.text());
-//					}
-//
-//					logger.info("Child HTML element ID: " + id);
-//					logger.info("Child HTML element databoarduri: " + dataBoardUri);
-//					Elements messageElements = childElement.getElementsByClass("divMessage");
-//					for (Element messageElement : messageElements) {
-//						logger.info("Message HTML element " + count + ": " + messageElement.text() + "\n");
-//					}
-//				}
-//
-//				System.out.println("\n\n\n\n\n\n\n");
-//				count++;
-//			}
 
 		} else {
 			logger.warn("Register message sent failed. Verify below information.");

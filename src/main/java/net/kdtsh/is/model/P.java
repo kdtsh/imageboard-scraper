@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Abstract class for a `P' - the top level of a post containing some metadata.
@@ -18,18 +20,18 @@ public abstract class P implements Serializable {
 	 */
 	private static final long serialVersionUID = 4676106632565129201L;
 
-	@JsonProperty("dataBoardUri")
-	protected String dataBoardUri;
+	@JsonProperty("boardName")
+	protected String boardName;
 
 	@JsonProperty("id")
 	protected BigInteger id;
 
-	public String getDataBoardUri() {
-		return dataBoardUri;
+	public String getBoardName() {
+		return boardName;
 	}
 
-	public void setDataBoardUri(String dataBoardUri) {
-		this.dataBoardUri = dataBoardUri;
+	public void setBoardName(String boardName) {
+		this.boardName = boardName;
 	}
 
 	public BigInteger getId() {
@@ -41,10 +43,14 @@ public abstract class P implements Serializable {
 	}
 
 	/**
-	 * Convert the post, or posts, to JSON.
+	 * Convert this object to JSON.
 	 * 
 	 * @return
+	 * @throws JsonProcessingException
 	 */
-	public abstract String toJson();
+	public String toJson() throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		return objectMapper.writeValueAsString(this);
+	}
 
 }

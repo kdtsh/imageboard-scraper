@@ -15,6 +15,9 @@ public abstract class Channel implements Serializable {
 	 */
 	private static final long serialVersionUID = 3513725384809500811L;
 
-	public abstract String getChannelPath();
+	protected String channelPath;
 
+	public String getChannelPath() {
+		return channelPath;
+	}	
 }

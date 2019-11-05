@@ -1,5 +1,7 @@
 package net.kdtsh.is.model.cp;
 
+import java.math.BigInteger;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.kdtsh.is.model.P;
@@ -20,6 +22,8 @@ public class Cp extends P {
 	@JsonProperty
 	private CpPost cpPost;
 
+	private BigInteger opId;
+
 	public CpPost getCpPost() {
 		return cpPost;
 	}
@@ -28,16 +32,12 @@ public class Cp extends P {
 		this.cpPost = cpPost;
 	}
 
-	/**
-	 * TODO implement this method.
-	 */
-	public String toJson() {
-		return null;
+	public BigInteger getOpId() {
+		return opId;
 	}
 
-	@Override
-	public String toString() {
-		return String.join(",", id.toString(), cpPost.toString());
+	public void setOpId(BigInteger opId) {
+		this.opId = opId;
 	}
 
 }
