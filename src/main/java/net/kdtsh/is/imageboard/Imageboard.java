@@ -18,13 +18,15 @@ package net.kdtsh.is.imageboard;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Set;
-
-import org.apache.http.client.utils.URIBuilder;
 
 import net.kdtsh.is.client.ImageboardClient;
 
+/**
+ * Abstract top-level class for an imageboard.
+ * 
+ * @author kdt
+ *
+ */
 public abstract class Imageboard implements Serializable {
 
 	/**
@@ -32,36 +34,51 @@ public abstract class Imageboard implements Serializable {
 	 */
 	private static final long serialVersionUID = -206971477818674742L;
 
+	/**
+	 * The type of imageboard, i.e. what imageboard it is.
+	 */
 	protected ImageboardType imageboardType;
 
-	protected URI imageboardUri;
+	/**
+	 * The site associated with the imageboard.
+	 */
+	protected URI uri;
 
+	/**
+	 * The Channels associated with the imageboard.
+	 */
+	protected Channels channels;
+
+	/**
+	 * The ImageboardClient associated with the imageboard.
+	 */
+	protected ImageboardClient imageboardClient;
+
+	/**
+	 * Get the type of imageboard.
+	 * 
+	 * @return
+	 */
 	public ImageboardType getImageboardType() {
 		return imageboardType;
 	}
 
-	public URI getImageboardUri() {
-		return imageboardUri;
+	/**
+	 * Get the Channels of the imageboard.
+	 * 
+	 * @return
+	 */
+	public Channels getChannels() {
+		return channels;
 	}
 
-	public URI getURIRelativePath(String path) throws URISyntaxException {
-		URIBuilder uriBuilder = new URIBuilder(imageboardUri.toString());
-		return uriBuilder.setPath(uriBuilder.getPath() + path).build().normalize();
-	}
-
-	public abstract Set<Channel> getChannels();
-
-	public abstract void setChannels(Set<Channel> channelSet);
-
-	public abstract ImageboardClient generateClient() throws Exception;
-
-	public static enum ImageboardType {
-		BUNKERCHAN, FOURCHAN;
-
-		@Override
-		public String toString() {
-			return this.name().toLowerCase();
-		}
+	/**
+	 * Get the ImageboardClient of the imageboard.
+	 * 
+	 * @return
+	 */
+	public ImageboardClient getImageboardClient() {
+		return imageboardClient;
 	}
 
 }

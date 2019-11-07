@@ -14,8 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.kdtsh.is.imageboard;
+package net.kdtsh.is.imageboard.bunkerchan;
 
-public class ImageboardFactory {
+import java.util.HashMap;
+
+import net.kdtsh.is.imageboard.Channels;
+
+public class BunkerchanChannels extends Channels {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final String[] CHANNEL_ARR = { "leftypol", "gulag" };
+
+	{
+		channelPathMap = new HashMap<>();
+		for (String channel : CHANNEL_ARR) {
+			channelPathMap.put(channel, channel);
+		}
+	}
 
 }

@@ -19,13 +19,11 @@ package net.kdtsh.is.es;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.text.StringSubstitutor;
@@ -40,10 +38,8 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.kdtsh.is.imageboard.Imageboard;
-import net.kdtsh.is.imageboard.bunkerchan.BunkerchanImageboard;
 import net.kdtsh.is.model.P;
-import net.kdtsh.is.model.cp.Cp;
+import net.kdtsh.is.model.Page;
 
 public class ElasticsearchClientImpl implements ElasticsearchClient {
 
@@ -74,6 +70,14 @@ public class ElasticsearchClientImpl implements ElasticsearchClient {
 	 */
 	private HttpClient httpClient;
 
+	/**
+	 * Implementation of ElasticsearchClient with a simple HttpClient which ignores
+	 * any SSL.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyStoreException
+	 * @throws KeyManagementException
+	 */
 	public ElasticsearchClientImpl() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		HttpClientBuilder cb = HttpClientBuilder.create();
 		SSLContextBuilder sslcb = new SSLContextBuilder();
@@ -84,62 +88,41 @@ public class ElasticsearchClientImpl implements ElasticsearchClient {
 
 	/**
 	 * Create a new ElasticsearchClientImpl given an HttpClient.
-	 * <p>
 	 * 
-	 * TODO the details of the HttpClient need to be configured before the
-	 * ElasticsearchClientImpl is created, or they need to be specified otherwise.
-	 * Determine a way of doing this.
-	 * 
-	 * @param httpClient
+	 * @param httpClient the HttpClient to associated with this ElasticsearchClient.
 	 */
 	public ElasticsearchClientImpl(HttpClient httpClient) {
 		this.httpClient = httpClient;
 	}
 
 	@Override
-	public void postPs(List<P> pList, Imageboard imageboard) throws ClientProtocolException, IOException {
-		for (P p : pList) {
-			postP(p, imageboard);
+	public void postPage(Page page) throws ClientProtocolException, IOException {
+
+		for (P p : page.getPList()) {
+			StringEntity stringEntity = new StringEntity(p.toJson(), "UTF-8");
+
+			Map<String, String> valuesMap = new HashMap<>();
+			valuesMap.put("HOST", ES_LOC);
+			valuesMap.put("IMAGEBOARD_TYPE", page.getImageboard().getImageboardType().toString());
+			valuesMap.put("POST_ID", p.getBoardName() + "-" + p.getId().toString());
+
+			StringSubstitutor sub = new StringSubstitutor(valuesMap);
+			String url = sub.replace(URL_FORMAT);
+
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
+			httpPost.setEntity(stringEntity);
+
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			httpPost.reset();
+			BufferedReader br = new BufferedReader(new InputStreamReader((httpResponse.getEntity().getContent())));
+
+			logger.info("Response:");
+			for (String line = br.readLine(); line != null; line = br.readLine()) {
+				logger.info(line);
+			}
+
 		}
-	}
-
-	@Override
-	public void postP(P p, Imageboard imageboard) throws ClientProtocolException, IOException {
-		StringEntity stringEntity = new StringEntity(p.toJson(), "UTF-8");
-
-		Map<String, String> valuesMap = new HashMap<>();
-		valuesMap.put("HOST", ES_LOC);
-		valuesMap.put("IMAGEBOARD_TYPE", imageboard.getImageboardType().toString());
-		valuesMap.put("POST_ID", p.getBoardName() + "-" + p.getId().toString());
-
-		StringSubstitutor sub = new StringSubstitutor(valuesMap);
-		String url = sub.replace(URL_FORMAT);
-
-		HttpPost httpPost = new HttpPost(url);
-		httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
-		httpPost.setEntity(stringEntity);
-
-		HttpResponse httpResponse = httpClient.execute(httpPost);
-		httpPost.reset();
-		BufferedReader br = new BufferedReader(new InputStreamReader((httpResponse.getEntity().getContent())));
-
-		logger.info("Response:");
-		for (String line = br.readLine(); line != null; line = br.readLine()) {
-			logger.info(line);
-		}
-
-	}
-
-	public static void main(String[] args) throws ClientProtocolException, IOException {
-		HttpClient httpClient = HttpClientBuilder.create().build();
-		ElasticsearchClient ec = new ElasticsearchClientImpl(httpClient);
-
-		Cp cp = new Cp();
-		cp.setId(new BigInteger("12345"));
-		cp.setBoardName("board");
-
-		Imageboard imageboard = new BunkerchanImageboard();
-		ec.postP(cp, imageboard);
 	}
 
 }

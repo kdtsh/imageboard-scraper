@@ -31,13 +31,9 @@ import net.kdtsh.is.model.Page;
 public abstract class ImageboardUtils {
 
 	/**
-	 * Get the URL for a channel.
-	 * 
-	 * @param imageboard
-	 * @param channel
-	 * @return
+	 * The imageboard with which this utility class is associated.
 	 */
-	public abstract URL getChannelUrl(Channel channel);
+	protected Imageboard imageboard;
 
 	/**
 	 * Extract a `Page' given a Document. This involves traversing a page, following

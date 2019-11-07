@@ -22,7 +22,7 @@ package net.kdtsh.is.imageboard;
  * @author kdt
  *
  */
-public class NoSuchChannelException extends RuntimeException {
+public class NoSuchChannelException extends Exception {
 
 	/**
 	 * 

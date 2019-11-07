@@ -16,35 +16,21 @@
  */
 package net.kdtsh.is.imageboard.fourchan;
 
-import java.util.Set;
-
-import net.kdtsh.is.client.ImageboardClient;
-import net.kdtsh.is.imageboard.Channel;
 import net.kdtsh.is.imageboard.Imageboard;
-import net.kdtsh.is.imageboard.Imageboard.ImageboardType;
+import net.kdtsh.is.imageboard.ImageboardType;
 
 public class FourchanImageboard extends Imageboard {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1408032002953646410L;
+	
 	{
 		imageboardType = ImageboardType.FOURCHAN;
-	}
-
-	@Override
-	public Set<Channel> getChannels() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setChannels(Set<Channel> channelSet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ImageboardClient generateClient() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		uri = ImageboardType.FOURCHAN.getImageboardUrl();
+//		channels = new FourchanChannels();
+//		imageboardClient = new FourchanImageboardClient();
 	}
 	
 	

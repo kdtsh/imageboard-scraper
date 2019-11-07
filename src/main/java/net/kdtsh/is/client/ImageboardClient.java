@@ -29,10 +29,14 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
 
 import net.kdtsh.is.imageboard.Channel;
+import net.kdtsh.is.imageboard.Imageboard;
+import net.kdtsh.is.imageboard.ImageboardUtils;
 import net.kdtsh.is.model.Page;
 
 /**
@@ -43,10 +47,36 @@ import net.kdtsh.is.model.Page;
  */
 public abstract class ImageboardClient {
 
+	/**
+	 * Logger for the class.
+	 */
+	protected Logger logger;
+
+	/**
+	 * The Imageboard with which this ImageboardClient is associated.
+	 */
+	protected Imageboard imageboard;
+
+	/**
+	 * Special utilities for the imageboard.
+	 */
+	protected ImageboardUtils imageboardUtils;
+
+	/**
+	 * HttpClient used to retrieve posts from an imageboard.
+	 */
 	protected HttpClient httpClient;
 
-	public HttpClient getHttpClient() {
-		return httpClient;
+	/**
+	 * Get the URI of a relative path on the site URI.
+	 * 
+	 * @param path
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	public URI getURIRelativePath(String path) throws URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(imageboard.toString());
+		return uriBuilder.setPath(uriBuilder.getPath() + path).build().normalize();
 	}
 
 	/**
@@ -57,7 +87,24 @@ public abstract class ImageboardClient {
 	 * @param channel the Channel for which to get the Page.
 	 * @return the Page.
 	 */
-	public abstract Page getPage(Channel channel);
+	public Page getPage(Channel channel) {
+		try {
+			Document doc = getDocumentForPath(channel.getChannelName());
+			return imageboardUtils.extractPage(doc);
+		} catch (URISyntaxException e) {
+			logger.error(String.format("URLSyntaxException when attempting to get a Page for Bunkerchan, channel %s",
+					channel.toString()), e);
+		} catch (ClientProtocolException e) {
+			logger.error(
+					String.format("ClientProtocolException when attempting to get a Page for Bunkerchan, channel %s",
+							channel.toString()),
+					e);
+		} catch (IOException e) {
+			logger.error(String.format("IOException when attempting to get a Page for Bunkerchan, channel %s",
+					channel.toString()), e);
+		}
+		return null;
+	}
 
 	/**
 	 * Get the Document corresponding to a given URL.
@@ -68,10 +115,10 @@ public abstract class ImageboardClient {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public Document getDocument(URI uri) throws URISyntaxException, ClientProtocolException, IOException {
-		HttpGet httpGet = new HttpGet(uri);
+	public Document getDocumentForPath(String path) throws URISyntaxException, ClientProtocolException, IOException {
+		URI pathUri = getURIRelativePath(path);
+		HttpGet httpGet = new HttpGet(pathUri);
 		HttpResponse response = httpClient.execute(httpGet);
-
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK
 				|| response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
 			StringWriter sw = new StringWriter();
@@ -80,7 +127,6 @@ public abstract class ImageboardClient {
 
 			return Jsoup.parse(sw.toString());
 		}
-
 		return null;
 	}
 

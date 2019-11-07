@@ -22,7 +22,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.kdtsh.is.model.P;
-import net.kdtsh.is.model.cp.Cp;
 
 /**
  * Original post.

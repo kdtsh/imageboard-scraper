@@ -31,9 +31,26 @@ public abstract class Channel implements Serializable {
 	 */
 	private static final long serialVersionUID = 3513725384809500811L;
 
-	protected String channelPath;
+	/**
+	 * The name of a Channel.
+	 */
+	protected String channelName;
 
-	public String getChannelPath() {
-		return channelPath;
-	}	
+	/**
+	 * Constructor.
+	 * 
+	 * @param channelName the name of a Channel.
+	 */
+	public Channel(String channelName) {
+		this.channelName = channelName;
+	}
+
+	/**
+	 * Get the name of the Channel.
+	 * 
+	 * @return the name of the Channel.
+	 */
+	public String getChannelName() {
+		return channelName;
+	}
 }

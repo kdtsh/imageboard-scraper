@@ -18,13 +18,22 @@ package net.kdtsh.is.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import net.kdtsh.is.imageboard.Imageboard;
 
 public class Page {
 
-	@JsonProperty
+	private Imageboard imageboard;
+	
 	private List<P> pList;
 
+	public Imageboard getImageboard() {
+		return imageboard;
+	}
+	
+	public void setImageboard(Imageboard imageboard) {
+		this.imageboard = imageboard;
+	}
+	
 	public List<P> getPList() {
 		return pList;
 	}

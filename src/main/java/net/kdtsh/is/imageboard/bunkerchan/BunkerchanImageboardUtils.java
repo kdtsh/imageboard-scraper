@@ -26,9 +26,7 @@ import static java.time.temporal.ChronoField.YEAR;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -49,9 +47,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import net.kdtsh.is.client.ImageboardClient;
-import net.kdtsh.is.client.BunkerchanClientImpl;
-import net.kdtsh.is.imageboard.Channel;
 import net.kdtsh.is.imageboard.Imageboard;
 import net.kdtsh.is.imageboard.ImageboardUtils;
 import net.kdtsh.is.model.P;
@@ -70,9 +65,11 @@ import net.kdtsh.is.model.op.OpPostUploads;
  * @author kdt
  *
  */
-public class BunkerchanUtils extends ImageboardUtils {
+public class BunkerchanImageboardUtils extends ImageboardUtils {
 
-	private static final Imageboard BUNKERCHAN_IMAGEBOARD = new BunkerchanImageboard();
+	public BunkerchanImageboardUtils(Imageboard imageboard) {
+		this.imageboard = imageboard;
+	}
 
 	/**
 	 * Get the opElement ID.
@@ -263,9 +260,7 @@ public class BunkerchanUtils extends ImageboardUtils {
 		List<Document> documentList = new ArrayList<>();
 		for (Element threadLink : doc.getElementsByClass("linkReply")) {
 			String threadPathStr = threadLink.attr("href");
-			URI threadPath = BUNKERCHAN_IMAGEBOARD.getURIRelativePath(threadPathStr);
-			ImageboardClient client = new BunkerchanClientImpl();
-			documentList.add(client.getDocument(threadPath));
+			documentList.add(imageboard.getImageboardClient().getDocumentForPath(threadPathStr));
 		}
 
 		return documentList;
@@ -307,13 +302,6 @@ public class BunkerchanUtils extends ImageboardUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-	}
-
-	@Override
-	public URL getChannelUrl(Channel channel) {
-
-		// TODO Auto-generated method stub
 		return null;
 	}
 

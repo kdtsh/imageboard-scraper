@@ -23,11 +23,13 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.http.client.ClientProtocolException;
 
-import net.kdtsh.is.client.BunkerchanClientImpl;
 import net.kdtsh.is.client.ImageboardClient;
 import net.kdtsh.is.es.ElasticsearchClient;
 import net.kdtsh.is.es.ElasticsearchClientImpl;
-import net.kdtsh.is.imageboard.bunkerchan.BunkerchanChannel;
+import net.kdtsh.is.imageboard.Channel;
+import net.kdtsh.is.imageboard.Channels;
+import net.kdtsh.is.imageboard.Imageboard;
+import net.kdtsh.is.imageboard.NoSuchChannelException;
 import net.kdtsh.is.imageboard.bunkerchan.BunkerchanImageboard;
 import net.kdtsh.is.model.Page;
 
@@ -47,10 +49,15 @@ public class App {
 	public static void doWork() {
 
 		try {
-			ImageboardClient ic = new BunkerchanClientImpl();
-			Page page = ic.getPage(BunkerchanChannel.checkChannel("leftypol"));
+			Imageboard ib = new BunkerchanImageboard();
+			Channels bcs = ib.getChannels();
+			Channel bc = bcs.getChannel("leftypol");
+			
+			ImageboardClient ic = ib.getImageboardClient();
+			Page page = ic.getPage(bc);
+			
 			ElasticsearchClient ec = new ElasticsearchClientImpl();
-			ec.postPs(page.getPList(), new BunkerchanImageboard());
+			ec.postPage(page);
 		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,6 +65,9 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchChannelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

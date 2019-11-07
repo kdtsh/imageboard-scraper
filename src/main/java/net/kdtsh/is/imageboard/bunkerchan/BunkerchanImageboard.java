@@ -17,17 +17,19 @@
 package net.kdtsh.is.imageboard.bunkerchan;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Set;
 
+import net.kdtsh.is.client.BunkerchanImageboardClient;
 import net.kdtsh.is.client.ImageboardClient;
-import net.kdtsh.is.client.BunkerchanClientImpl;
-import net.kdtsh.is.imageboard.Channel;
+import net.kdtsh.is.imageboard.Channels;
 import net.kdtsh.is.imageboard.Imageboard;
+import net.kdtsh.is.imageboard.ImageboardType;
 
+/**
+ * An imageboard for Bunkerchan.
+ * 
+ * @author kdt
+ *
+ */
 public class BunkerchanImageboard extends Imageboard {
 
 	/**
@@ -35,31 +37,34 @@ public class BunkerchanImageboard extends Imageboard {
 	 */
 	private static final long serialVersionUID = -4492637275536404855L;
 
-	private Set<Channel> channelSet;
-
 	{
 		imageboardType = ImageboardType.BUNKERCHAN;
-		try {
-			imageboardUri = new URI("https://www.bunkerchan.xyz/");
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		uri = ImageboardType.BUNKERCHAN.getImageboardUrl();
+		channels = new BunkerchanChannels();
+		imageboardClient = new BunkerchanImageboardClient(this);
 	}
 
-	@Override
-	public Set<Channel> getChannels() {
-		return channelSet;
+	public BunkerchanImageboard(ImageboardClient imageboardClient) {
+		imageboardType = ImageboardType.BUNKERCHAN;
+		uri = ImageboardType.BUNKERCHAN.getImageboardUrl();
+		channels = new BunkerchanChannels();
+		this.imageboardClient = imageboardClient;
 	}
 
-	@Override
-	public void setChannels(Set<Channel> channelSet) {
-		this.channelSet = channelSet;
-	}
-
-	@Override
-	public ImageboardClient generateClient() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		return new BunkerchanClientImpl();
+	/**
+	 * Constructor.
+	 * 
+	 * @param imageboardType
+	 * @param uri
+	 * @param channels
+	 * @param imageboardClient
+	 */
+	public BunkerchanImageboard(ImageboardType imageboardType, URI uri, Channels channels,
+			ImageboardClient imageboardClient) {
+		this.imageboardType = imageboardType;
+		this.uri = uri;
+		this.channels = channels;
+		this.imageboardClient = imageboardClient;
 	}
 
 }
