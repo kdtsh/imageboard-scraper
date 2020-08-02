@@ -21,9 +21,13 @@ import java.util.Set;
 import net.kdtsh.is.client.ImageboardClient;
 import net.kdtsh.is.imageboard.Channel;
 import net.kdtsh.is.imageboard.Imageboard;
-import net.kdtsh.is.imageboard.Imageboard.ImageboardType;
 
 public class FourchanImageboard extends Imageboard {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7585528683415688440L;
 
 	{
 		imageboardType = ImageboardType.FOURCHAN;
